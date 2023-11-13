@@ -1,0 +1,5 @@
+.DS_Store
+/logs
+.env
+docker-compose.yml
+*.db

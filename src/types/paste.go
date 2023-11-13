@@ -7,8 +7,9 @@ type PasteRequestBody struct {
 	BodyHeader     string `gorm:"not null" json:"bodyHeader" binding:"required"`
 	BodyCiphertext string `gorm:"not null" json:"bodyCiphertext" binding:"required"`
 
-	PasswordHash     string `json:"passwordHash"`
-	PasswordHashSalt string `json:"passwordHashSalt"`
+	PasswordHash       string `json:"passwordHash"`
+	PasswordHashSalt   string `json:"passwordHashSalt"`
+	EncryptedKeyHeader string `json:"encryptedKeyHeader"`
 
 	// gorm ignore
 	ExpiresInSeconds int `gorm:"-" json:"expiresInSeconds" binding:"required"`

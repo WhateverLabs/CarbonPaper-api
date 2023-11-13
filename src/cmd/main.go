@@ -51,6 +51,8 @@ func main() {
 	}
 
 	r.POST("/new", pasteController.CreatePaste)
+	r.GET("/metadata/:pasteID", pasteController.GetPasteMetadata)
+	r.GET("/data/:pasteID", pasteController.GetPaste)
 
 	r.Run(fmt.Sprintf("%s:%s", cfg.ListenHost, cfg.ListenPort))
 }

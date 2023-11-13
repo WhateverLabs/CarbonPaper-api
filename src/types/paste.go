@@ -7,7 +7,7 @@ type PasteRequestBody struct {
 	BodyHeader     string `gorm:"not null" json:"bodyHeader" binding:"required"`
 	BodyCiphertext string `gorm:"not null" json:"bodyCiphertext" binding:"required"`
 
-	PasswordHash       string `json:"passwordHash"`
+	KekHash            string `json:"kekHash"`
 	PasswordHashSalt   string `json:"passwordHashSalt"`
 	EncryptedKeyHeader string `json:"encryptedKeyHeader"`
 

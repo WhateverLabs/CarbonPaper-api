@@ -42,8 +42,7 @@ func main() {
 	}))
 
 	apiRepo := repository.ApiRepository{
-		DB:  db,
-		Cfg: cfg,
+		DB: db,
 	}
 
 	pasteController := controllers.PasteController{
@@ -53,6 +52,16 @@ func main() {
 	r.POST("/new", pasteController.CreatePaste)
 	r.GET("/metadata/:pasteID", pasteController.GetPasteMetadata)
 	r.GET("/data/:pasteID", pasteController.GetPaste)
+
+	go func() {
+		purgerController := controllers.PurgerController{
+			ApiRepository: apiRepo,
+		}
+		for {
+			purgerController.Purge()
+			time.Sleep(60 * time.Second)
+		}
+	}()
 
 	r.Run(fmt.Sprintf("%s:%s", cfg.ListenHost, cfg.ListenPort))
 }

@@ -91,6 +91,10 @@ func (ctrl *PasteController) GetPaste(c *gin.Context) {
 		return
 	}
 
+	if paste.PasteRequestBody.OneView {
+		ctrl.DB.Delete(&paste)
+	}
+
 	if paste.PasteRequestBody.KekHash != "" {
 		providedHash := c.Query("passwordHash")
 
@@ -108,5 +112,4 @@ func (ctrl *PasteController) GetPaste(c *gin.Context) {
 		Message: "Paste was found",
 		Data:    paste.PasteRequestBody,
 	})
-
 }

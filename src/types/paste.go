@@ -11,6 +11,8 @@ type PasteRequestBody struct {
 	PasswordHashSalt   string `json:"passwordHashSalt"`
 	EncryptedKeyHeader string `json:"encryptedKeyHeader"`
 
+	OneView bool `json:"oneView"`
+
 	// gorm ignore
 	ExpiresInSeconds int `gorm:"-" json:"expiresInSeconds" binding:"required"`
 }

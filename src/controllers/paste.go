@@ -1,18 +1,21 @@
 package controllers
 
 import (
-	"carbon-paper/src/models"
 	"carbon-paper/src/repository"
 	"carbon-paper/src/types"
-	"carbon-paper/src/utils"
 	"log"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 type PasteController struct {
-	repository.ApiRepository
+	repo *repository.PasteRepository
+}
+
+func NewPasteController(repo *repository.PasteRepository) *PasteController {
+	return &PasteController{
+		repo: repo,
+	}
 }
 
 func (ctrl *PasteController) CreatePaste(c *gin.Context) {
@@ -26,27 +29,12 @@ func (ctrl *PasteController) CreatePaste(c *gin.Context) {
 		return
 	}
 
-	newID, err := utils.GenerateRandomID(10)
+	newID, err := ctrl.repo.CreatePaste(&body, body.ExpiresInSeconds)
 	if err != nil {
 		log.Println(err)
 		c.AbortWithStatusJSON(500, types.GenericResponseBody{
 			Success: false,
-			Message: "Unable to generate ID",
-		})
-		return
-	}
-
-	paste := models.Paste{
-		ID:               newID,
-		PasteRequestBody: body,
-		CreatedAt:        time.Now(),
-		ExpiresAt:        time.Now().Add(time.Duration(body.ExpiresInSeconds) * time.Second),
-	}
-	if err := ctrl.DB.Create(&paste).Error; err != nil {
-		log.Println(err)
-		c.AbortWithStatusJSON(500, types.GenericResponseBody{
-			Success: false,
-			Message: "Unable to save paste",
+			Message: "Could not save paste",
 		})
 		return
 	}
@@ -61,8 +49,8 @@ func (ctrl *PasteController) CreatePaste(c *gin.Context) {
 func (ctrl *PasteController) GetPasteMetadata(c *gin.Context) {
 	pasteID := c.Param("pasteID")
 
-	paste := models.Paste{}
-	if err := ctrl.DB.Where("id = ?", pasteID).First(&paste).Error; err != nil {
+	paste, err := ctrl.repo.GetPasteByID(pasteID)
+	if err != nil {
 		c.AbortWithStatusJSON(404, types.GenericResponseBody{
 			Success: false,
 			Message: "Paste not found",
@@ -82,8 +70,8 @@ func (ctrl *PasteController) GetPasteMetadata(c *gin.Context) {
 func (ctrl *PasteController) GetPaste(c *gin.Context) {
 	pasteID := c.Param("pasteID")
 
-	paste := models.Paste{}
-	if err := ctrl.DB.Where("id = ?", pasteID).First(&paste).Error; err != nil {
+	paste, err := ctrl.repo.GetPasteByID(pasteID)
+	if err != nil {
 		c.AbortWithStatusJSON(404, types.GenericResponseBody{
 			Success: false,
 			Message: "Paste not found",
@@ -92,7 +80,7 @@ func (ctrl *PasteController) GetPaste(c *gin.Context) {
 	}
 
 	if paste.PasteRequestBody.OneView {
-		ctrl.DB.Delete(&paste)
+		ctrl.repo.DeletePasteByID(pasteID)
 	}
 
 	if paste.PasteRequestBody.KekHash != "" {

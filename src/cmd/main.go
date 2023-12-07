@@ -45,9 +45,9 @@ func main() {
 		DB: db,
 	}
 
-	pasteController := controllers.PasteController{
-		ApiRepository: apiRepo,
-	}
+	pasteRepository := repository.NewPasteRepository(db)
+
+	pasteController := controllers.NewPasteController(pasteRepository)
 
 	r.POST("/new", pasteController.CreatePaste)
 	r.GET("/metadata/:pasteID", pasteController.GetPasteMetadata)

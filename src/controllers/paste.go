@@ -79,10 +79,6 @@ func (ctrl *PasteController) GetPaste(c *gin.Context) {
 		return
 	}
 
-	if paste.PasteRequestBody.OneView {
-		ctrl.repo.DeletePasteByID(pasteID)
-	}
-
 	if paste.PasteRequestBody.KekHash != "" {
 		providedHash := c.Query("passwordHash")
 
@@ -93,6 +89,10 @@ func (ctrl *PasteController) GetPaste(c *gin.Context) {
 			})
 			return
 		}
+	}
+
+	if paste.PasteRequestBody.OneView {
+		ctrl.repo.DeletePasteByID(pasteID)
 	}
 
 	c.JSON(200, types.GenericResponseBody{

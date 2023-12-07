@@ -98,6 +98,6 @@ func (ctrl *PasteController) GetPaste(c *gin.Context) {
 	c.JSON(200, types.GenericResponseBody{
 		Success: true,
 		Message: "Paste was found",
-		Data:    paste.PasteRequestBody,
+		Data:    paste,
 	})
 }

@@ -6,10 +6,10 @@ import (
 )
 
 type Paste struct {
-	ID string `gorm:"primaryKey,uniqueIndex"`
+	ID string `gorm:"primaryKey,uniqueIndex" json:"id"`
 
-	PasteRequestBody types.PasteRequestBody `gorm:"embedded"`
+	types.PasteRequestBody `gorm:"embedded" json:",inline"`
 
-	CreatedAt time.Time
-	ExpiresAt time.Time
+	CreatedAt time.Time `json:"-"`
+	ExpiresAt time.Time `json:"expiresAt"`
 }

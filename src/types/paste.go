@@ -14,5 +14,5 @@ type PasteRequestBody struct {
 	OneView bool `json:"oneView"`
 
 	// gorm ignore
-	ExpiresInSeconds int `gorm:"-" json:"expiresInSeconds" binding:"required"`
+	ExpiresInSeconds int `gorm:"-" json:"expiresInSeconds,omitempty" binding:"required"`
 }

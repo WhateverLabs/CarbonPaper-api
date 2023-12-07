@@ -20,6 +20,9 @@ func main() {
 
 	db := database.ConnectDatabase(cfg.DatabaseName)
 
+	// make logs folder if it doesn't exist
+	os.MkdirAll(cfg.LogLocation, os.ModePerm)
+
 	// set logging location
 	f, err := os.OpenFile(fmt.Sprintf("%s/carbon-paper-%d.log", cfg.LogLocation, time.Now().Unix()), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {

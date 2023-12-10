@@ -44,6 +44,10 @@ func main() {
 		MaxAge:        12 * time.Hour,
 	}))
 
+	ratelimitRepo := repository.NewRatelimitRepository()
+
+	middlewareController := controllers.NewMiddlewareController(ratelimitRepo)
+
 	apiRepo := repository.ApiRepository{
 		DB: db,
 	}
@@ -52,7 +56,7 @@ func main() {
 
 	pasteController := controllers.NewPasteController(pasteRepository)
 
-	r.POST("/new", pasteController.CreatePaste)
+	r.POST("/new", middlewareController.RatelimitMiddleware(), pasteController.CreatePaste)
 	r.GET("/metadata/:pasteID", pasteController.GetPasteMetadata)
 	r.GET("/data/:pasteID", pasteController.GetPaste)
 

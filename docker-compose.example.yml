@@ -5,4 +5,6 @@ services:
     image: "carbonpaperapi:latest"
     ports:
       - 8080
+    volumes:
+      - ./logs:/app/logs
     env_file: .env

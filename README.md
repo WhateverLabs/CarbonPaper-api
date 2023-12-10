@@ -1,5 +1,7 @@
 # carbon-paper-api
 
+[Frontend Repository](https://github.com/WhateverLabs/CarbonPaper)
+
 Carbon Paper API manages pastes.
 
 ## Deployment
